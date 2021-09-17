@@ -19,7 +19,7 @@ public class OrderTests {
 
     @Test
     void Should_ReduceQuantityByCorrectAmount_WhenPassedValidQuantity() {
-        Order testOrder = new Order(UUID.randomUUID(),
+        Order testOrder = new Order(new UUID(111,111),
                 10f, 10f, Exchange.BUY, Market.CAD);
 
         testOrder.reduceQuantity(5f);
@@ -28,7 +28,7 @@ public class OrderTests {
 
     @Test
     void Should_SetIsCompletedToTrue_WhenQuantityIsReducedToZero() {
-        Order testOrder = new Order(UUID.randomUUID(),
+        Order testOrder = new Order(new UUID(111,111),
                 10f, 10f, Exchange.BUY, Market.CAD);
         assertFalse(testOrder.isComplete());
         testOrder.reduceQuantity(10f);
