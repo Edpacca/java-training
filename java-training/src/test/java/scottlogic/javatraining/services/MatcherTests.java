@@ -116,7 +116,7 @@ public class MatcherTests {
         List<Order> matchedOrders = Matcher.getMatchingOrders(dbOrders, newOrder);
 
         assertTrue(matchedOrders.stream()
-                .allMatch(order -> order.getPrice() >= testPrice));
+                .allMatch(order -> order.getPrice() <= testPrice));
     }
 
     @Test
@@ -143,7 +143,7 @@ public class MatcherTests {
         List<Order> matchedOrders = Matcher.getMatchingOrders(dbOrders, newOrder);
 
         assertTrue(matchedOrders.stream()
-                .allMatch(order -> order.getPrice() <= testPrice));
+                .allMatch(order -> order.getPrice() >= testPrice));
     }
 
     @Test

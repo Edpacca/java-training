@@ -33,10 +33,10 @@ public class Matcher {
     }
 
     private static boolean isPriceMatch_dbBuyOrder(Order dbBuyOrder, Order newSellOrder) {
-        return dbBuyOrder.getPrice() <= newSellOrder.getPrice();
+        return dbBuyOrder.getPrice() >= newSellOrder.getPrice();
     }
 
     private static boolean isPriceMatch_dbSellOrder(Order dbSellOrder, Order newBuyOrder) {
-        return dbSellOrder.getPrice() >= newBuyOrder.getPrice();
+        return dbSellOrder.getPrice() <= newBuyOrder.getPrice();
     }
 }
