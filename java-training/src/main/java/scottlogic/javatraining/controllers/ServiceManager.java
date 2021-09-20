@@ -1,7 +1,5 @@
 package scottlogic.javatraining.controllers;
 
-import scottlogic.javatraining.interfaces.IGetOrderDb;
-import scottlogic.javatraining.interfaces.IGetTradeDb;
 import scottlogic.javatraining.models.Order;
 import scottlogic.javatraining.models.Trade;
 import scottlogic.javatraining.services.Matcher;
