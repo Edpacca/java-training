@@ -15,7 +15,6 @@ public class Order {
     private final Exchange exchange;
     private final Market market;
     @Setter private float quantity;
-    private boolean isComplete = false;
 
     public Order(UUID userId, float price, float quantity, Exchange exchange, Market market) {
         this.time = LocalDateTime.now();
@@ -42,9 +41,6 @@ public class Order {
             throw new Error("trade quantity is more than order quantity. Cannot make trade");
         }
         this.quantity -= quantity;
-        if (this.quantity == 0) {
-            this.isComplete = true;
-        }
     }
 
     public boolean isComplete() {
