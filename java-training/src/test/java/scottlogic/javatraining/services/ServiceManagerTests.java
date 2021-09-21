@@ -1,6 +1,8 @@
-package scottlogic.javatraining.controllers;
+package scottlogic.javatraining.services;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
 import scottlogic.javatraining.models.Exchange;
 import scottlogic.javatraining.models.Market;
 import scottlogic.javatraining.models.Order;
@@ -16,24 +18,36 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class ServiceManagerTests {
 
+    @Mock
+    Matcher mockMatcher = Mockito.mock(Matcher.class);
+
+    @Mock
+    Trader mockTrader = Mockito.mock(Trader.class);
+
     @Test
     void Should_AddTradesToTradeDb_WhenPassedNewOrderWithMatches() {
 
         Order newOrder = (new Order(
                 new UUID(7,7),40f, 30f, Exchange.BUY, Market.CAD));
 
+        List<Trade> tradeDb = new ArrayList<>();
+
         List<Order> orderDb = new ArrayList<Order>() {{
-            add(new Order(new UUID(1,1),10f, 10f, Exchange.BUY, Market.CAD));
-            add(new Order(new UUID(2,2),20f, 10f, Exchange.BUY, Market.CAD));
-            add(new Order(new UUID(3,3),30f, 10f, Exchange.BUY, Market.CAD));
             add(new Order(new UUID(4,4),25f, 10f, Exchange.SELL, Market.CAD));
             add(new Order(new UUID(5,5),30f, 10f, Exchange.SELL, Market.CAD));
             add(new Order(new UUID(6,6),35f, 10f, Exchange.SELL, Market.CAD));
         }};
 
-        List<Trade> tradeDb = new ArrayList<>();
+        List<Trade> trades = new ArrayList<Trade>() {{
+            add(new Trade(orderDb.get(0), newOrder));
+            add(new Trade(orderDb.get(1), newOrder));
+            add(new Trade(orderDb.get(2), newOrder));
+        }};
 
-        ServiceManager.handleNewOrder(newOrder, orderDb, tradeDb);
+        Mockito.when(mockMatcher.getMatchingOrders(orderDb, newOrder)).thenReturn(orderDb);
+        Mockito.when(mockTrader.makeTrades(orderDb, newOrder)).thenReturn(trades);
+        ServiceManager service = new ServiceManager(mockMatcher, mockTrader);
+        service.handleNewOrder(newOrder, orderDb, tradeDb);
         assertEquals(3, tradeDb.size());
     }
 
@@ -44,7 +58,9 @@ public class ServiceManagerTests {
         List<Order> orderDb = new ArrayList<>();
         List<Trade> tradeDb = new ArrayList<>();
 
-        ServiceManager.handleNewOrder(newOrder, orderDb, tradeDb);
+        Mockito.when(mockMatcher.getMatchingOrders(orderDb, newOrder)).thenReturn(orderDb);
+        ServiceManager service = new ServiceManager(mockMatcher, mockTrader);
+        service.handleNewOrder(newOrder, orderDb, tradeDb);
         assertTrue(orderDb.contains(newOrder));
     }
 
@@ -61,7 +77,16 @@ public class ServiceManagerTests {
 
         List<Trade> tradeDb = new ArrayList<>();
 
-        ServiceManager.handleNewOrder(newOrder, orderDb, tradeDb);
+        List<Trade> trades = new ArrayList<Trade>() {{
+            add(new Trade(orderDb.get(0), newOrder));
+            add(new Trade(orderDb.get(1), newOrder));
+            add(new Trade(orderDb.get(2), newOrder));
+        }};
+
+        Mockito.when(mockMatcher.getMatchingOrders(orderDb, newOrder)).thenReturn(orderDb);
+        Mockito.when(mockTrader.makeTrades(orderDb, newOrder)).thenReturn(trades);
+        ServiceManager service = new ServiceManager(mockMatcher, mockTrader);
+        service.handleNewOrder(newOrder, orderDb, tradeDb);
         assertTrue(orderDb.contains(newOrder));
     }
 
@@ -82,9 +107,18 @@ public class ServiceManagerTests {
             add(testDbOrder2);
         }};
 
+        List<Trade> trades = new ArrayList<Trade>() {{
+            add(new Trade(testDbOrder0, newOrder));
+            add(new Trade(testDbOrder1, newOrder));
+            add(new Trade(testDbOrder2, newOrder));
+        }};
+
         List<Trade> tradeDb = new ArrayList<>();
 
-        ServiceManager.handleNewOrder(newOrder, orderDb, tradeDb);
+        Mockito.when(mockMatcher.getMatchingOrders(orderDb, newOrder)).thenReturn(orderDb);
+        Mockito.when(mockTrader.makeTrades(orderDb, newOrder)).thenReturn(trades);
+        ServiceManager service = new ServiceManager(mockMatcher, mockTrader);
+        service.handleNewOrder(newOrder, orderDb, tradeDb);
         assertFalse(orderDb.contains(testDbOrder0));
         assertFalse(orderDb.contains(testDbOrder1));
         assertFalse(orderDb.contains(testDbOrder2));
