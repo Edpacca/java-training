@@ -1,8 +1,6 @@
 package scottlogic.javatraining.models;
 
-import jdk.vm.ci.meta.Local;
 import lombok.Getter;
-
 import java.time.LocalDate;
 import java.util.*;
 
@@ -18,22 +16,22 @@ public class Trade {
     private final Float price;
     private final Market market;
 
-    public Trade(Order order1, Order order2) {
-        validateTrade(order1, order2);
-        this.price = order1.getPrice();
-        this.market = order1.getMarket();
+    public Trade(Order matchedOrder, Order newOrder) {
+        validateTrade(matchedOrder, newOrder);
+        this.price = matchedOrder.getPrice();
+        this.market = matchedOrder.getMarket();
         this.id = UUID.randomUUID();
         this.time = LocalDate.now();
-        this.quantity = Math.min(order1.getQuantity(), order2.getQuantity());
+        this.quantity = Math.min(matchedOrder.getQuantity(), newOrder.getQuantity());
 
-        Order buyOrder = order1.getExchange() == Exchange.BUY ? order1 : order2;
-        Order sellOrder = buyOrder == order1 ? order2 : order1;
+        Order buyOrder = matchedOrder.getExchange() == Exchange.BUY ? matchedOrder : newOrder;
+        Order sellOrder = buyOrder == matchedOrder ? newOrder : matchedOrder;
         this.buyOrderId = buyOrder.getId();
         this.buyUserId = buyOrder.getUserId();
         this.sellOrderId = sellOrder.getId();
         this.sellUserId = sellOrder.getUserId();
 
-        makeTrade(order1, order2);
+        makeTrade(matchedOrder, newOrder);
     }
 
     private void validateTrade(Order order1, Order order2) {

@@ -32,8 +32,8 @@ public class MatcherTests {
 
         Order newOrder = (new Order(new UUID(7,7),
                 40f, 10f, Exchange.BUY, Market.CAD));
-
-        List<Order> matchedOrders = Matcher.getMatchingOrders(dbOrders, newOrder);
+        Matcher matcher = new Matcher();
+        List<Order> matchedOrders = matcher.getMatchingOrders(dbOrders, newOrder);
 
         assertTrue(matchedOrders.stream()
                 .allMatch(order -> order.getExchange() == Exchange.SELL));
@@ -59,7 +59,8 @@ public class MatcherTests {
         Order newOrder = (new Order(new UUID(7,7),
                 40f, 10f, Exchange.SELL, Market.CAD));
 
-        List<Order> matchedOrders = Matcher.getMatchingOrders(dbOrders, newOrder);
+        Matcher matcher = new Matcher();
+        List<Order> matchedOrders = matcher.getMatchingOrders(dbOrders, newOrder);
 
         assertTrue(matchedOrders.stream()
                 .allMatch(order -> order.getExchange() == Exchange.BUY));
@@ -86,7 +87,8 @@ public class MatcherTests {
         Order newOrder = (new Order(new UUID(7,7),
                 40f, 10f, Exchange.BUY, testMarket));
 
-        List<Order> matchedOrders = Matcher.getMatchingOrders(dbOrders, newOrder);
+        Matcher matcher = new Matcher();
+        List<Order> matchedOrders = matcher.getMatchingOrders(dbOrders, newOrder);
 
         assertTrue(matchedOrders.stream()
                 .allMatch(order -> order.getMarket() == testMarket));
@@ -113,7 +115,8 @@ public class MatcherTests {
         Order newOrder = (new Order(new UUID(7,7),
                 testPrice, 10f, Exchange.BUY, Market.CAD));
 
-        List<Order> matchedOrders = Matcher.getMatchingOrders(dbOrders, newOrder);
+        Matcher matcher = new Matcher();
+        List<Order> matchedOrders = matcher.getMatchingOrders(dbOrders, newOrder);
 
         assertTrue(matchedOrders.stream()
                 .allMatch(order -> order.getPrice() <= testPrice));
@@ -140,7 +143,8 @@ public class MatcherTests {
         Order newOrder = (new Order(new UUID(7,7),
                 testPrice, 10f, Exchange.SELL, Market.CAD));
 
-        List<Order> matchedOrders = Matcher.getMatchingOrders(dbOrders, newOrder);
+        Matcher matcher = new Matcher();
+        List<Order> matchedOrders = matcher.getMatchingOrders(dbOrders, newOrder);
 
         assertTrue(matchedOrders.stream()
                 .allMatch(order -> order.getPrice() >= testPrice));
@@ -160,7 +164,8 @@ public class MatcherTests {
         }};
 
         Order newOrder = new Order(testId,10f, 10f, Exchange.SELL, Market.CAD);
-        List<Order> matchedOrders = Matcher.getMatchingOrders(dbOrders, newOrder);
+        Matcher matcher = new Matcher();
+        List<Order> matchedOrders = matcher.getMatchingOrders(dbOrders, newOrder);
 
         assertTrue(matchedOrders.stream()
                 .noneMatch(order -> order.getUserId() == testId));
