@@ -1,20 +1,26 @@
 package scottlogic.javatraining.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.annotation.Id;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Getter
 public class Order {
-    private final LocalDateTime time;
+    @Id
     private final UUID id;
+
     private final UUID userId;
-    private final float price;
+    private final LocalDateTime time;
     private final Exchange exchange;
     private final Market market;
-    @Setter private float quantity;
+    private final float price;
+
+    @Setter
+    private float quantity;
 
     public Order(UUID userId, float price, float quantity, Exchange exchange, Market market) {
         this.time = LocalDateTime.now();
@@ -43,6 +49,7 @@ public class Order {
         this.quantity -= quantity;
     }
 
+    @JsonIgnore
     public boolean isComplete() {
         return quantity == 0;
     }
