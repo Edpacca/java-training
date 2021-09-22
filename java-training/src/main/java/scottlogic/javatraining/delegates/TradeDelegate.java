@@ -9,12 +9,10 @@ import java.util.UUID;
 @Component("tradeDelegate")
 public class TradeDelegate implements ITradeDelegate {
     @Override
-    public List<Trade> getDbTrades() {
-        return null;
-    }
+    public List<Trade> getDbTrades() { throw new UnsupportedOperationException(); }
 
     @Override
     public Trade getTrade(UUID id) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 }

@@ -11,16 +11,16 @@ import java.util.UUID;
 public class UserAccountDelegate implements IUserAccountDelegate {
     @Override
     public List<UserAccount> getDbUserAccounts() {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public UserAccount getUserAccount(UUID id) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public UserAccount postUserAccount(UserAccountRequest userAccountRequest) {
-        return null;
+        throw new UnsupportedOperationException();
     }
 }
