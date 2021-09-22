@@ -1,5 +1,6 @@
 package scottlogic.javatraining.services;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import scottlogic.javatraining.models.Exchange;
 import scottlogic.javatraining.models.Market;
@@ -12,6 +13,12 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class MatcherTests {
+
+    Matcher matcher;
+    @BeforeEach
+    void setUp() {
+        matcher = new Matcher();
+    }
 
     @Test
     void Should_ReturnAListOfSellOrders_WhenPassedANewBuyOrder() {
@@ -32,7 +39,7 @@ public class MatcherTests {
 
         Order newOrder = (new Order(new UUID(7,7),
                 40f, 10f, Exchange.BUY, Market.CAD));
-        Matcher matcher = new Matcher();
+
         List<Order> matchedOrders = matcher.getMatchingOrders(dbOrders, newOrder);
 
         assertTrue(matchedOrders.stream()
@@ -59,7 +66,7 @@ public class MatcherTests {
         Order newOrder = (new Order(new UUID(7,7),
                 40f, 10f, Exchange.SELL, Market.CAD));
 
-        Matcher matcher = new Matcher();
+
         List<Order> matchedOrders = matcher.getMatchingOrders(dbOrders, newOrder);
 
         assertTrue(matchedOrders.stream()
@@ -87,7 +94,7 @@ public class MatcherTests {
         Order newOrder = (new Order(new UUID(7,7),
                 40f, 10f, Exchange.BUY, testMarket));
 
-        Matcher matcher = new Matcher();
+
         List<Order> matchedOrders = matcher.getMatchingOrders(dbOrders, newOrder);
 
         assertTrue(matchedOrders.stream()
@@ -115,7 +122,7 @@ public class MatcherTests {
         Order newOrder = (new Order(new UUID(7,7),
                 testPrice, 10f, Exchange.BUY, Market.CAD));
 
-        Matcher matcher = new Matcher();
+
         List<Order> matchedOrders = matcher.getMatchingOrders(dbOrders, newOrder);
 
         assertTrue(matchedOrders.stream()
@@ -143,7 +150,7 @@ public class MatcherTests {
         Order newOrder = (new Order(new UUID(7,7),
                 testPrice, 10f, Exchange.SELL, Market.CAD));
 
-        Matcher matcher = new Matcher();
+
         List<Order> matchedOrders = matcher.getMatchingOrders(dbOrders, newOrder);
 
         assertTrue(matchedOrders.stream()
@@ -164,7 +171,7 @@ public class MatcherTests {
         }};
 
         Order newOrder = new Order(testId,10f, 10f, Exchange.SELL, Market.CAD);
-        Matcher matcher = new Matcher();
+
         List<Order> matchedOrders = matcher.getMatchingOrders(dbOrders, newOrder);
 
         assertTrue(matchedOrders.stream()

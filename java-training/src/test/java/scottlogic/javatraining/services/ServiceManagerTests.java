@@ -66,8 +66,8 @@ public class ServiceManagerTests {
 
     @Test
     void Should_AddInCompleteOrderToOrderDb_IfOrderHasMatchesButRemainedInComplete() {
-        Order newOrder = (new Order(
-                new UUID(7,7),40f, 40f, Exchange.BUY, Market.CAD));
+        Order newOrder = new Order(
+                new UUID(7,7),40f, 40f, Exchange.BUY, Market.CAD);
 
         List<Order> orderDb = new ArrayList<Order>() {{
             add(new Order(new UUID(4,4),25f, 10f, Exchange.SELL, Market.CAD));

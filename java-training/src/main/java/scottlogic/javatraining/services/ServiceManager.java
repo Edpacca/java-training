@@ -5,8 +5,8 @@ import scottlogic.javatraining.interfaces.ITrader;
 import scottlogic.javatraining.models.Order;
 import scottlogic.javatraining.models.Trade;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ServiceManager {
 
@@ -31,10 +31,10 @@ public class ServiceManager {
     }
 
     private void removeCompletedOrders(List<Order> orderDb) {
-        List<Order> completed = new ArrayList<>();
-        orderDb.forEach(order -> {
-            if (order.isComplete()) completed.add(order);
-        });
+        List<Order> completed = orderDb.stream()
+                .filter(Order::isComplete)
+                .collect(Collectors.toList());
+
         orderDb.removeAll(completed);
     }
 }

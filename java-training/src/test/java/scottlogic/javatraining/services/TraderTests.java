@@ -1,5 +1,6 @@
 package scottlogic.javatraining.services;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import scottlogic.javatraining.models.Exchange;
 import scottlogic.javatraining.models.Market;
@@ -17,6 +18,13 @@ import java.util.UUID;
 
 public class TraderTests {
 
+    Trader trader;
+
+    @BeforeEach
+    void Setup() {
+        trader = new Trader();
+    }
+
     @Test
     void Should_StartTradingWithHighestPrice_WhenPassedNewBuyOrder() {
         UUID newOrderId = new UUID(1,1);
@@ -28,7 +36,6 @@ public class TraderTests {
             add(expectedMatch);
             add(new Order(new UUID(3, 3),15f, 10f, Exchange.SELL, Market.CAD));
         }};
-        Trader trader = new Trader();
         List<Trade> trades = trader.makeTrades(matchedOrders, newOrder);
         assertEquals(trades.size(), 1);
         assertEquals(trades.get(0).getBuyUserId(), newOrderId);
@@ -47,7 +54,6 @@ public class TraderTests {
             add(new Order(new UUID(3, 3),20f, 10f, Exchange.BUY, Market.CAD));
         }};
 
-        Trader trader = new Trader();
         List<Trade> trades = trader.makeTrades(matchedOrders, newOrder);
         assertEquals(trades.size(), 1);
         assertEquals(trades.get(0).getBuyUserId(), expectedMatchId);
@@ -70,7 +76,6 @@ public class TraderTests {
 
         assertFalse(newOrder.isComplete());
 
-        Trader trader = new Trader();
         List<Trade> trades = trader.makeTrades(matchedOrders, newOrder);
 
         assertTrue(newOrder.isComplete());
@@ -86,7 +91,6 @@ public class TraderTests {
 
         List<Order> matchedOrders =  new ArrayList<Order>() {{ add(matchedOrder); }};
 
-        Trader trader = new Trader();
         List<Trade> trades = trader.makeTrades(matchedOrders, newOrder);
         assertEquals(newOrder.getQuantity(), 5f);
         assertEquals(matchedOrder.getQuantity(), 0f);
@@ -101,7 +105,6 @@ public class TraderTests {
 
         List<Order> matchedOrders =  new ArrayList<Order>() {{ add(matchedOrder); }};
 
-        Trader trader = new Trader();
         List<Trade> trades = trader.makeTrades(matchedOrders, newOrder);
         assertEquals(newOrder.getQuantity(), 0f);
         assertEquals(matchedOrder.getQuantity(), 5f);
@@ -139,7 +142,6 @@ public class TraderTests {
                     matchedIds.get(6), 20f, 10f, Exchange.SELL, Market.CAD));
         }};
 
-        Trader trader = new Trader();
         List<Trade> trades = trader.makeTrades(matchedOrders, newOrder);
         // expected month order: 4, 5, 6, 7, 8, 9, 10
         // expected ID order:    3, 4, 1, 5, 2, 6, 0
@@ -184,7 +186,6 @@ public class TraderTests {
                     matchedIds.get(6), 20f, 10f, Exchange.BUY, Market.CAD));
         }};
 
-        Trader trader = new Trader();
         List<Trade> trades = trader.makeTrades(matchedOrders, newOrder);
         // expected month order: 2, 3, 4, 5, 6, 7, 8
         // expected ID order:    2, 5, 4, 1, 3, 0, 6
