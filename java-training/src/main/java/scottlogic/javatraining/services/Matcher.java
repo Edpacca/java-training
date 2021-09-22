@@ -2,17 +2,17 @@ package scottlogic.javatraining.services;
 
 import java.util.List;
 
-import jdk.vm.ci.code.site.Mark;
 import scottlogic.javatraining.interfaces.IFilterCondition;
+import scottlogic.javatraining.interfaces.IMatcher;
 import scottlogic.javatraining.models.Exchange;
 import scottlogic.javatraining.models.Market;
 import scottlogic.javatraining.models.Order;
 
 import static java.util.stream.Collectors.toList;
 
-public class Matcher {
+public class Matcher implements IMatcher {
 
-    public static List<Order> getMatchingOrders(List<Order> ordersDb, Order newOrder) {
+    public List<Order> getMatchingOrders(List<Order> ordersDb, Order newOrder) {
         Exchange matchedExchange = getOppositeExchange(newOrder);
         Market matchedMarket = newOrder.getMarket();
         IFilterCondition priceFilter = matchedExchange == Exchange.BUY
@@ -27,16 +27,16 @@ public class Matcher {
                 .collect(toList());
     }
 
-    private static Exchange getOppositeExchange(Order newOrder) {
+    private Exchange getOppositeExchange(Order newOrder) {
         return newOrder.getExchange() == Exchange.BUY
                 ? Exchange.SELL : Exchange.BUY;
     }
 
     private static boolean isPriceMatch_dbBuyOrder(Order dbBuyOrder, Order newSellOrder) {
-        return dbBuyOrder.getPrice() <= newSellOrder.getPrice();
+        return dbBuyOrder.getPrice() >= newSellOrder.getPrice();
     }
 
     private static boolean isPriceMatch_dbSellOrder(Order dbSellOrder, Order newBuyOrder) {
-        return dbSellOrder.getPrice() >= newBuyOrder.getPrice();
+        return dbSellOrder.getPrice() <= newBuyOrder.getPrice();
     }
 }
