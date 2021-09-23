@@ -1,27 +1,33 @@
 package scottlogic.javatraining.models;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Getter
+@NoArgsConstructor
 public class Trade {
-    private final LocalDate time;
-    private final UUID id;
-    private final UUID buyOrderId;
-    private final UUID buyUserId;
-    private final UUID sellOrderId;
-    private final UUID sellUserId;
-    private final Float quantity;
-    private final Float price;
-    private final Market market;
+    @Id
+    private UUID id;
+    private LocalDateTime time;
+    private UUID buyOrderId;
+    private UUID buyUserId;
+    private UUID sellOrderId;
+    private UUID sellUserId;
+    private Float quantity;
+    private Float price;
+    private Market market;
 
     public Trade(Order matchedOrder, Order newOrder) {
         validateTrade(matchedOrder, newOrder);
         this.price = matchedOrder.getPrice();
         this.market = matchedOrder.getMarket();
         this.id = UUID.randomUUID();
-        this.time = LocalDate.now();
+        this.time = LocalDateTime.now();
         this.quantity = Math.min(matchedOrder.getQuantity(), newOrder.getQuantity());
 
         Order buyOrder = matchedOrder.getExchange() == Exchange.BUY ? matchedOrder : newOrder;
