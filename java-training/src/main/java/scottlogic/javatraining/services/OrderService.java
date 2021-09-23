@@ -49,13 +49,8 @@ public class OrderService implements IOrderService {
 
     private void handleNewOrder(Order order) {
         List<Order> matchedOrders = matcher.getMatchingOrders(orderRepository.findAll(), order);
-
-        if (matchedOrders.size() > 0) {
-            List<Trade> newTrades = trader.makeTrades(matchedOrders, order);
-            tradeRepository.saveAll(newTrades);
-        }
+        if (matchedOrders.size() > 0) makeTrades(matchedOrders, order);
         if (!order.isComplete()) orderRepository.save(order);
-
         removeCompletedOrders(matchedOrders);
     }
 
@@ -65,5 +60,10 @@ public class OrderService implements IOrderService {
                 .collect(Collectors.toList());
 
         orderRepository.deleteAll(completed);
+    }
+
+    private void makeTrades(List<Order> matchedOrders, Order order) {
+        List<Trade> newTrades = trader.makeTrades(matchedOrders, order);
+        tradeRepository.saveAll(newTrades);
     }
 }
