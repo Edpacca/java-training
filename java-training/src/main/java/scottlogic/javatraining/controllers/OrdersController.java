@@ -1,40 +1,48 @@
 package scottlogic.javatraining.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import scottlogic.javatraining.delegates.IOrderDelegate;
-import scottlogic.javatraining.models.*;
+import scottlogic.javatraining.interfaces.IOrderService;
+import scottlogic.javatraining.models.Order;
+import scottlogic.javatraining.models.OrderRequest;
 
 import java.util.List;
 import java.util.UUID;
 
 @RestController
+@RequestMapping("orders")
 public class OrdersController {
 
     @Autowired
-    private IOrderDelegate orderDelegate;
+    private IOrderService orderService;
 
-    @GetMapping (path ="/orders")
+    @GetMapping
     public ResponseEntity<List<Order>> getOrders() {
-        List<Order> orders = orderDelegate.getDbOrders();
+        List<Order> orders = orderService.getDbOrders();
         return orders == null
                 ? ResponseEntity.notFound().build()
                 : ResponseEntity.ok().body(orders);
     }
 
-    @GetMapping (path="/order/{id}")
+    @GetMapping (path="/{id}")
     public ResponseEntity<Order> getOrder(@PathVariable final UUID id) {
-        Order requestedOrder = orderDelegate.getOrder(id);
+        Order requestedOrder = orderService.getOrder(id);
 
         return requestedOrder == null
                 ? ResponseEntity.notFound().build()
                 : ResponseEntity.ok().body(requestedOrder);
     }
 
-    @PostMapping(path="/order", headers = "Accept=application/json")
+    @PostMapping(headers = "Accept=application/json")
     public ResponseEntity<Order> postOrder(@RequestBody OrderRequest request) {
-        Order newOrder = orderDelegate.postOrder(request);
+        Order newOrder = orderService.postOrder(request);
         return ResponseEntity.ok().body(newOrder);
+    }
+
+    @DeleteMapping(path="/{id}")
+    public void deleteOrder(@PathVariable final UUID id) {
+        orderService.deleteOrder(id);
     }
 }

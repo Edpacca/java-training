@@ -1,24 +1,23 @@
 package scottlogic.javatraining.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.annotation.Id;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@NoArgsConstructor
 @Getter
 public class Order {
     @Id
-    private final UUID id;
-
-    private final UUID userId;
-    private final LocalDateTime time;
-    private final Exchange exchange;
-    private final Market market;
-    private final float price;
-
+    private UUID id;
+    private UUID userId;
+    private LocalDateTime time;
+    private Exchange exchange;
+    private Market market;
+    private float price;
     @Setter
     private float quantity;
 
@@ -32,6 +31,7 @@ public class Order {
         this.market = market;
     }
 
+    // Test constructor - inject localDateTime
     public Order(LocalDateTime time, UUID userId, float price, float quantity, Exchange exchange, Market market) {
         this.time = time;
         this.id = UUID.randomUUID();
@@ -52,5 +52,12 @@ public class Order {
     @JsonIgnore
     public boolean isComplete() {
         return quantity == 0;
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+                "Order[id=%s, %s %f (%s) at %f]",
+                id.toString(), exchange.toString(), quantity, market.toString(), price);
     }
 }
