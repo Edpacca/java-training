@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Getter
@@ -12,7 +13,7 @@ import java.util.*;
 public class Trade {
     @Id
     private UUID id;
-    private LocalDate time;
+    private LocalDateTime time;
     private UUID buyOrderId;
     private UUID buyUserId;
     private UUID sellOrderId;
@@ -26,7 +27,7 @@ public class Trade {
         this.price = matchedOrder.getPrice();
         this.market = matchedOrder.getMarket();
         this.id = UUID.randomUUID();
-        this.time = LocalDate.now();
+        this.time = LocalDateTime.now();
         this.quantity = Math.min(matchedOrder.getQuantity(), newOrder.getQuantity());
 
         Order buyOrder = matchedOrder.getExchange() == Exchange.BUY ? matchedOrder : newOrder;
