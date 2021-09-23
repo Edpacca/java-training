@@ -48,8 +48,8 @@ public class OrdersControllerTests {
 
     @Test
     void Should_ReturnEmptyListAndStatusOK_WhenDbExistsButHasNoOrders() {
-        List<Order> dbOrders =  new ArrayList<Order>();
-        when(mockOrderService.getDbOrders()).thenReturn(new ArrayList<Order>());
+        List<Order> dbOrders =  new ArrayList<>();
+        when(mockOrderService.getDbOrders()).thenReturn(new ArrayList<>());
         assertEquals(ordersController.getOrders().getBody(), dbOrders);
         verify(mockOrderService, times(1)).getDbOrders();
         assertEquals(ordersController.getOrders().getStatusCode(), HttpStatus.OK);
