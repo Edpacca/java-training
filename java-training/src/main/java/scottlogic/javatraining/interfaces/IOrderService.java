@@ -10,4 +10,5 @@ public interface IOrderService {
     List<Order> getDbOrders();
     Order getOrder(UUID id);
     Order postOrder(OrderRequest order);
+    void deleteOrder(UUID id);
 }

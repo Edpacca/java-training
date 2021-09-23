@@ -32,10 +32,8 @@ public class OrderService implements IOrderService {
     public List<Order> getDbOrders() {
         return orderRepository.findAll();
     }
-
-    public Order getOrder(UUID id) {
-        return orderRepository.findById(id).orElse(null);
-    }
+    public Order getOrder(UUID id) { return orderRepository.findById(id).orElse(null); }
+    public void deleteOrder(UUID id) { orderRepository.deleteById(id); }
 
     public Order postOrder(OrderRequest orderRequest) {
         Order newOrder = new Order(
