@@ -15,11 +15,11 @@ import java.util.UUID;
 public class UsersController {
 
     @Autowired
-    private IUserService userAccount;
+    private IUserService userService;
 
     @GetMapping
     public ResponseEntity<List<UserAccount>> getUserAccounts() {
-        List<UserAccount> users = userAccount.getDbUserAccounts();
+        List<UserAccount> users = userService.getDbUserAccounts();
         return users == null
                 ? ResponseEntity.notFound().build()
                 : ResponseEntity.ok().body(users);
@@ -27,7 +27,7 @@ public class UsersController {
 
     @GetMapping (path="/{id}")
     public ResponseEntity<UserAccount> getUserAccount(@PathVariable final UUID id) {
-        UserAccount requestedUserAccount = userAccount.getUserAccount(id);
+        UserAccount requestedUserAccount = userService.getUserAccount(id);
 
         return requestedUserAccount == null
                 ? ResponseEntity.notFound().build()
@@ -36,7 +36,7 @@ public class UsersController {
 
     @PostMapping(headers = "Accept=application/json")
     public ResponseEntity<UserAccount> postUserAccount(@RequestBody UserAccountRequest request) {
-        UserAccount newUserAccount = userAccount.postUserAccount(request);
+        UserAccount newUserAccount = userService.postUserAccount(request);
         return ResponseEntity.ok().body(newUserAccount);
     }
 }
