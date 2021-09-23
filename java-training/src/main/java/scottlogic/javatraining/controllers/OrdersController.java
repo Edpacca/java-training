@@ -1,7 +1,5 @@
 package scottlogic.javatraining.controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import scottlogic.javatraining.interfaces.IOrderService;
@@ -15,8 +13,11 @@ import java.util.UUID;
 @RequestMapping("orders")
 public class OrdersController {
 
-    @Autowired
-    private IOrderService orderService;
+    private final IOrderService orderService;
+
+    public OrdersController(IOrderService orderService) {
+        this.orderService = orderService;
+    }
 
     @GetMapping
     public ResponseEntity<List<Order>> getOrders() {
