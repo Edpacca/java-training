@@ -11,9 +11,4 @@ import scottlogic.javatraining.models.Order;
 
 public interface OrderRepository extends MongoRepository<Order, UUID> {
     Optional<Order> findById(UUID id);
-    List<Order> findByUserId(UUID id);
-    List<Order> findByPrice(Float price);
-    List<Order> findByQuantity(Float quantity);
-    List<Order> findByMarket(Market market);
-    List<Order> findByExchange(Exchange exchange);
 }
