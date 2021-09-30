@@ -4,6 +4,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PastOrPresent;
+import javax.validation.constraints.Positive;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
@@ -12,14 +16,26 @@ import java.util.*;
 @NoArgsConstructor
 public class Trade {
     @Id
+    @NotNull
     private UUID id;
+    @NotNull
+    @PastOrPresent
     private LocalDateTime time;
+    @NotNull
     private UUID buyOrderId;
+    @NotNull
     private UUID buyUserId;
+    @NotNull
     private UUID sellOrderId;
+    @NotNull
     private UUID sellUserId;
+    @NotNull
+    @Positive
     private Float quantity;
+    @NotNull
+    @Positive
     private Float price;
+    @NotNull
     private Market market;
 
     public Trade(Order matchedOrder, Order newOrder) {
