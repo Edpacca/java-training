@@ -4,30 +4,32 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import scottlogic.javatraining.delegates.ITradeDelegate;
+import scottlogic.javatraining.interfaces.ITradeService;
 import scottlogic.javatraining.models.Trade;
 
 import java.util.List;
 import java.util.UUID;
 
 @RestController
+@RequestMapping("trades")
 public class TradesController {
 
     @Autowired
-    private ITradeDelegate tradeDelegate;
+    private ITradeService tradeService;
 
-    @GetMapping(path ="/trades")
+    @GetMapping
     public ResponseEntity<List<Trade>> getTrades() {
-        List<Trade> trades = tradeDelegate.getDbTrades();
+        List<Trade> trades = tradeService.getDbTrades();
         return trades == null
                 ? ResponseEntity.notFound().build()
                 : ResponseEntity.ok().body(trades);
     }
 
-    @GetMapping (path="/trade/{id}")
+    @GetMapping (path="/{id}")
     public ResponseEntity<Trade> getTrade(@PathVariable final UUID id) {
-        Trade requestedTrade = tradeDelegate.getTrade(id);
+        Trade requestedTrade = tradeService.getTrade(id);
 
         return requestedTrade == null
                 ? ResponseEntity.notFound().build()
