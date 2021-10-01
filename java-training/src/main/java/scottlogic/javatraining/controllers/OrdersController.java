@@ -6,11 +6,13 @@ import scottlogic.javatraining.interfaces.IOrderService;
 import scottlogic.javatraining.models.Order;
 import scottlogic.javatraining.models.OrderRequest;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("orders")
+@CrossOrigin
 public class OrdersController {
 
     private final IOrderService orderService;
@@ -37,7 +39,7 @@ public class OrdersController {
     }
 
     @PostMapping(headers = "Accept=application/json")
-    public ResponseEntity<Order> postOrder(@RequestBody OrderRequest request) {
+    public ResponseEntity<Order> postOrder(@Valid @RequestBody OrderRequest request) {
         Order newOrder = orderService.postOrder(request);
         return ResponseEntity.ok().body(newOrder);
     }

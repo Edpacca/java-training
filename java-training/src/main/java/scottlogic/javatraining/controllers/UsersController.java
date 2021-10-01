@@ -7,11 +7,13 @@ import scottlogic.javatraining.interfaces.IUserService;
 import scottlogic.javatraining.models.UserAccount;
 import scottlogic.javatraining.models.UserAccountRequest;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.UUID;
 
 @RestController
 @RequestMapping("users")
+@CrossOrigin
 public class UsersController {
 
     @Autowired
@@ -35,7 +37,7 @@ public class UsersController {
     }
 
     @PostMapping(headers = "Accept=application/json")
-    public ResponseEntity<UserAccount> postUserAccount(@RequestBody UserAccountRequest request) {
+    public ResponseEntity<UserAccount> postUserAccount(@Valid @RequestBody UserAccountRequest request) {
         UserAccount newUserAccount = userService.postUserAccount(request);
         return ResponseEntity.ok().body(newUserAccount);
     }

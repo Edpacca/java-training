@@ -58,8 +58,8 @@ public class OrdersControllerTests {
     @Test
     void Should_ReturnNotFound_WhenDbReturnsNull() {
         when(mockOrderService.getDbOrders()).thenReturn(null);
-        verify(mockOrderService, times(1)).getDbOrders();
         assertEquals(ordersController.getOrders().getStatusCode(), HttpStatus.NOT_FOUND);
+        verify(mockOrderService, times(1)).getDbOrders();
     }
 
     @Test
@@ -76,8 +76,8 @@ public class OrdersControllerTests {
     void Should_ReturnNotFound_WhenOrderIsNotInDb() {
         UUID testId = new UUID(1, 1);
         when(mockOrderService.getOrder(testId)).thenReturn(null);
-        verify(mockOrderService, times(1)).getOrder(testId);
         assertEquals(ordersController.getOrder(testId).getStatusCode(), HttpStatus.NOT_FOUND);
+        verify(mockOrderService, times(1)).getOrder(testId);
     }
 
     @Test
