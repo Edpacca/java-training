@@ -3,39 +3,36 @@ package scottlogic.javatraining.authentication;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import scottlogic.javatraining.models.UserAccount;
-
-
+import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
-public class JWTokenUtil {
+public class AuthTokenUtils {
 
     private final String SECRET_KEY = "AJF2dj9eRWs784r0TuYX37FGQ319J4bDsd";
-
-    public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
-    }
-
-    public Date extractExpiration(String token) {
-        return extractClaim(token, Claims::getExpiration);
-    }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
     }
 
-    public String generateToken(UserAccount userAccount) {
+    public String generateToken(UserDetails userAccount) {
         Map<String, Object> claims = new HashMap<>();
         return createToken(claims, userAccount.getUsername());
     }
 
-    public boolean validateToken(String token, UserAccount userAccount) {
+    public boolean validateToken(String token, UserDetails userAccount) {
         final String username = extractUsername(token);
         return (username.equals(userAccount.getUsername()) && !isTokenExpired(token));
+    }
+
+    public String extractUsername(String token) {
+        return extractClaim(token, Claims::getSubject);
+    }
+    public Date extractExpiration(String token) {
+        return extractClaim(token, Claims::getExpiration);
     }
 
     private String createToken(Map<String, Object> claims, String subject) {
