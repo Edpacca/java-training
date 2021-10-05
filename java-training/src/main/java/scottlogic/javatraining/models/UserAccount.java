@@ -11,18 +11,16 @@ import javax.validation.constraints.NotNull;
 import java.util.*;
 
 @NoArgsConstructor
+@Getter
 public class UserAccount implements UserDetails {
     @Id
     @NotNull
-    @Getter
     private UUID id;
     @Setter
     @NotNull
     @NotEmpty
-    @Getter
     private String username;
     @Setter
-    @Getter
     private String password;
 
     public UserAccount(UserAccountRequest user) {
