@@ -1,32 +1,42 @@
 package scottlogic.javatraining.services;
 
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import scottlogic.javatraining.interfaces.IUserService;
 import scottlogic.javatraining.models.UserAccount;
 import scottlogic.javatraining.models.UserAccountRequest;
 import scottlogic.javatraining.repositories.UserRepository;
 
-import java.util.List;
-import java.util.UUID;
-
 public class UserService implements IUserService {
 
     private final UserRepository userRepository;
+    private final BCryptPasswordEncoder encoder;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, BCryptPasswordEncoder encoder) {
         this.userRepository = userRepository;
-    }
-
-    public List<UserAccount> getDbUserAccounts() {
-        return userRepository.findAll();
-    }
-
-    public UserAccount getUserAccount(UUID id) {
-        return userRepository.findById(id).orElse(null);
+        this.encoder = encoder;
     }
 
     public UserAccount postUserAccount(UserAccountRequest userAccountRequest) {
-        UserAccount newUser = new UserAccount(userAccountRequest.name);
-        userRepository.save(newUser);
-        return(newUser);
+        if (!validateUserName(userAccountRequest.username)) {
+            UserAccount newUser = new UserAccount(userAccountRequest);
+            saveUserAccount(newUser);
+            return(newUser);
+        } else return  null;
+    }
+
+    private void saveUserAccount(UserAccount user) {
+        user.setPassword(encoder.encode(user.getPassword()));
+        userRepository.save(user);
+    }
+
+    private Boolean validateUserName(String username) {
+        return userRepository.findByUsername(username) != null;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByUsername(username);
     }
 }

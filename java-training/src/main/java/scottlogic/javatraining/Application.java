@@ -5,6 +5,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import scottlogic.javatraining.authentication.AuthTokenUtils;
+import scottlogic.javatraining.authentication.AuthenticationFilter;
 import scottlogic.javatraining.repositories.OrderRepository;
 import scottlogic.javatraining.repositories.TradeRepository;
 import scottlogic.javatraining.repositories.UserRepository;
@@ -31,7 +34,25 @@ public class Application {
 	}
 
 	@Bean
-	public UserService userService(@Autowired UserRepository userRepository) {
-		return new UserService(userRepository);
+	public UserService userService(@Autowired UserRepository userRepository,
+								   @Autowired BCryptPasswordEncoder encoder) {
+		return new UserService(userRepository, encoder);
 	}
+
+	@Bean
+	public BCryptPasswordEncoder encoder() {
+		return new BCryptPasswordEncoder();
+	}
+
+	@Bean
+	public AuthTokenUtils tokenUtils() {
+		return new AuthTokenUtils();
+	}
+
+	@Bean
+	public AuthenticationFilter authenticationFilter(@Autowired UserService userService,
+													 @Autowired AuthTokenUtils tokenUtils ) {
+		return new AuthenticationFilter(userService, tokenUtils);
+	}
+
 }
