@@ -8,7 +8,6 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import scottlogic.javatraining.authentication.AuthTokenUtils;
 import scottlogic.javatraining.authentication.AuthenticationFilter;
-import scottlogic.javatraining.authentication.SecurityConfigurer;
 import scottlogic.javatraining.repositories.OrderRepository;
 import scottlogic.javatraining.repositories.TradeRepository;
 import scottlogic.javatraining.repositories.UserRepository;

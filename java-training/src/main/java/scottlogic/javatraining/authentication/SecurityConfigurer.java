@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
 import scottlogic.javatraining.services.UserService;
 
 @EnableWebSecurity
@@ -31,7 +32,8 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable()
+        http.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues())
+                .and().csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/users/**").permitAll()
                 .anyRequest().authenticated()
@@ -39,6 +41,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
         http.addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
     }
+
 
     @Override
     @Bean

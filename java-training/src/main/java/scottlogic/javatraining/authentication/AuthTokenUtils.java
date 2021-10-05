@@ -11,8 +11,6 @@ import java.util.function.Function;
 
 public class AuthTokenUtils {
 
-    private final String SECRET_KEY = "AJF2dj9eRWs784r0TuYX37FGQ319J4bDsd";
-
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
         return claimsResolver.apply(claims);
@@ -40,13 +38,13 @@ public class AuthTokenUtils {
                 .setClaims(claims)
                 .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 900000))
-                .signWith(SignatureAlgorithm.HS256, SECRET_KEY)
+                .setExpiration(new Date(System.currentTimeMillis() + ConfigurationSettings.getExpirationTime()))
+                .signWith(SignatureAlgorithm.HS256, ConfigurationSettings.getSecretKey())
                 .compact();
     }
 
     private Claims extractAllClaims(String token) {
-        return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(token).getBody();
+        return Jwts.parser().setSigningKey(ConfigurationSettings.getSecretKey()).parseClaimsJws(token).getBody();
     }
 
     private Boolean isTokenExpired(String token) {

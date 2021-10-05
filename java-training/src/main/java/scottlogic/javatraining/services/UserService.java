@@ -19,12 +19,11 @@ public class UserService implements IUserService {
     }
 
     public UserAccount postUserAccount(UserAccountRequest userAccountRequest) {
-        if (validateUserName(userAccountRequest.username)) {
+        if (!validateUserName(userAccountRequest.username)) {
             UserAccount newUser = new UserAccount(userAccountRequest);
             saveUserAccount(newUser);
             return(newUser);
-        }
-        return null;
+        } else return  null;
     }
 
     private void saveUserAccount(UserAccount user) {
