@@ -20,8 +20,9 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @Override
     protected @NotNull ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException exception,
-                                                                                                              @NotNull HttpHeaders headers, @NotNull HttpStatus status,
-                                                                                                              @NotNull WebRequest request) {
+                                                                           @NotNull HttpHeaders headers,
+                                                                           @NotNull HttpStatus status,
+                                                                           @NotNull WebRequest request) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", new Date());
         body.put("status", status.value());

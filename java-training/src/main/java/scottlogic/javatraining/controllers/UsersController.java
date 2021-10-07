@@ -28,10 +28,13 @@ public class UsersController {
     private AuthTokenUtils authTokenUtils;
 
     @PostMapping(path="/signup", headers = "Accept=application/json")
-    public ResponseEntity<UserAccount> postUserAccount(@Valid @RequestBody UserAccountRequest request) {
+    public ResponseEntity<?> postUserAccount(@Valid @RequestBody UserAccountRequest request) {
         UserAccount newUser = userService.postUserAccount(request);
         if (newUser == null) return ResponseEntity.badRequest().build();
-        return ResponseEntity.ok().body(newUser);
+
+        final UserAccount user = (UserAccount) userService.loadUserByUsername(newUser.getUsername());
+        final String token = authTokenUtils.generateToken(user);
+        return ResponseEntity.ok(new AuthenticationResponse(token, user));
     }
 
     @PostMapping (path = "/login")
@@ -45,8 +48,8 @@ public class UsersController {
             throw new Exception("Incorrect username or password", exception);
         }
 
-        final UserDetails userDetails = userService.loadUserByUsername(authenticationRequest.getUsername());
-        final String token = authTokenUtils.generateToken(userDetails);
-        return ResponseEntity.ok(new AuthenticationResponse(token));
+        final UserAccount user = (UserAccount) userService.loadUserByUsername(authenticationRequest.getUsername());
+        final String token = authTokenUtils.generateToken(user);
+        return ResponseEntity.ok(new AuthenticationResponse(token, user));
     }
 }
